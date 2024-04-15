@@ -2,7 +2,11 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +17,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
 
-    Connection connection = getConnection();
+    Connection connection;
+
+    {
+        try {
+            connection = getConnection();
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void createUsersTable()  {
         try (Statement statement = connection.createStatement()) {
